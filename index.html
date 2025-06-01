@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MYSTCL Arcade - Gaming Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, 
+                #1a1a2e 0%, 
+                #16213e 25%, 
+                #0f3460 50%, 
+                #533a7b 75%, 
+                #1a1a2e 100%);
+            background-size: 400% 400%;
+            animation: cosmicShift 12s ease infinite;
+            min-height: 100vh;
+            color: #ffffff;
+        }
+
+        @keyframes cosmicShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .stars {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            animation: twinkle 4s infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.3; transform: scale(0.5); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .main-title {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: bold;
+            background: linear-gradient(45deg, #00ffff, #ff00ff, #ffff00, #00ffff);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleFlow 3s ease-in-out infinite;
+            letter-spacing: 0.1em;
+            margin-bottom: 15px;
+            text-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+        }
+
+        @keyframes titleFlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            color: #00ffff;
+            text-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+            letter-spacing: 0.15em;
+            opacity: 0.9;
+        }
+
+        .games-section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: #ff00ff;
+            text-shadow: 0 0 15px rgba(255, 0, 255, 0.8);
+            margin-bottom: 30px;
+            text-align: center;
+            letter-spacing: 0.1em;
+        }
+
+        .games-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .game-box {
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            padding: 25px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .game-box::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #00ffff, #ff00ff, #ffff00, #00ff00);
+            border-radius: 15px;
+            z-index: -1;
+            opacity: 0.7;
+        }
+
+        .game-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .game-box:hover::before {
+            opacity: 1;
+            animation: borderPulse 2s ease infinite;
+        }
+
+        @keyframes borderPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .game-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .game-title {
+            font-size: 1.1rem;
+            color: #ffffff;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            font-weight: bold;
+        }
+
+        .game-status {
+            font-size: 0.8rem;
+            color: #00ff00;
+            margin-bottom: 15px;
+            text-shadow: 0 0 8px rgba(0, 255, 0, 0.8);
+        }
+
+        .coming-soon .game-status {
+            color: #ffaa00;
+            text-shadow: 0 0 8px rgba(255, 170, 0, 0.8);
+        }
+
+        .play-button {
+            background: linear-gradient(45deg, #00ffff, #ff00ff);
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            color: #000000;
+            font-weight: bold;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .play-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .play-button:active {
+            transform: scale(0.95);
+        }
+
+        .coming-soon .play-button {
+            background: linear-gradient(45deg, #666666, #999999);
+            color: #333333;
+            cursor: not-allowed;
+        }
+
+        .coming-soon .play-button:hover {
+            transform: none;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            border-top: 1px solid rgba(0, 255, 255, 0.3);
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            color: #cccccc;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .mystcl-link {
+            color: #00ffff;
+            text-decoration: none;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .mystcl-link:hover {
+            color: #ff00ff;
+            text-shadow: 0 0 15px rgba(255, 0, 255, 0.8);
+        }
+
+        @media (max-width: 768px) {
+            .games-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+            }
+            
+            .game-box {
+                height: 180px;
+                padding: 20px 15px;
+            }
+            
+            .game-icon {
+                font-size: 2.5rem;
+                margin-bottom: 10px;
+            }
+            
+            .container {
+                padding: 30px 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .games-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    
+    <div class="container">
+        <header class="header">
+            <h1 class="main-title">MYSTCL ARCADE</h1>
+            <p class="subtitle">MYSTCL GAMING REALM</p>
+        </header>
+
+        <section class="games-section">
+            <h2 class="section-title">🎮 AVAILABLE GAMES</h2>
+            <div class="games-row">
+                <div class="game-box">
+                    <div>
+                        <div class="game-icon">🌟</div>
+                        <h3 class="game-title">PACMYST</h3>
+                        <div class="game-status">READY TO PLAY</div>
+                    </div>
+                    <a href="pacmyst.html" class="play-button">PLAY NOW</a>
+                </div>
+
+                <div class="game-box">
+                    <div>
+                        <div class="game-icon">👾</div>
+                        <h3 class="game-title">MYSTCL INVADERS</h3>
+                        <div class="game-status">READY TO PLAY</div>
+                    </div>
+                    <a href="mystclinvaders.html" class="play-button">PLAY NOW</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="games-section">
+            <h2 class="section-title">🌌 FUTURE REALMS</h2>
+            <div class="games-row">
+                <div class="game-box coming-soon">
+                    <div>
+                        <div class="game-icon">⚡</div>
+                        <h3 class="game-title">COSMIC RACING</h3>
+                        <div class="game-status">IN DEVELOPMENT</div>
+                    </div>
+                    <button class="play-button">COMING SOON</button>
+                </div>
+
+                <div class="game-box coming-soon">
+                    <div>
+                        <div class="game-icon">🎲</div>
+                        <h3 class="game-title">MYSTCL PUZZLE</h3>
+                        <div class="game-status">IN DEVELOPMENT</div>
+                    </div>
+                    <button class="play-button">COMING SOON</button>
+                </div>
+
+                <div class="game-box coming-soon">
+                    <div>
+                        <div class="game-icon">🌀</div>
+                        <h3 class="game-title">DIMENSION JUMP</h3>
+                        <div class="game-status">PLANNED</div>
+                    </div>
+                    <button class="play-button">COMING SOON</button>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <p>Part of the <a href="https://mystcl.xyz/" class="mystcl-link">MYSTCL</a> Universe</p>
+                <p>Built with cosmic energy and retro vibes ✨</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Create mystical stars
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 80; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.width = star.style.height = Math.random() * 3 + 1 + 'px';
+                star.style.animationDelay = Math.random() * 4 + 's';
+                star.style.animationDuration = (Math.random() * 4 + 3) + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Smooth hover effects
+        document.querySelectorAll('.game-box:not(.coming-soon)').forEach(box => {
+            box.addEventListener('mouseenter', () => {
+                box.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+            
+            box.addEventListener('mouseleave', () => {
+                box.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Initialize
+        createStars();
+
+        // Easter egg for mystcl fans
+        let clicks = 0;
+        document.querySelector('.main-title').addEventListener('click', () => {
+            clicks++;
+            if (clicks === 5) {
+                document.body.style.filter = 'hue-rotate(180deg)';
+                setTimeout(() => {
+                    document.body.style.filter = 'none';
+                    clicks = 0;
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>
